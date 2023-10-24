@@ -1,0 +1,110 @@
+## Finding the countries with highest number of customers
+SELECT D. country, COUNT(customer_id) AS number_of_customers
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_ID = D.country_ID
+GROUP BY country
+ORDER BY number_of_customers DESC
+LIMIT 10
+
+## Finding the cities with the highest number of customers
+SELECT C.city, D.country, COUNT(customer_id) AS number_of_customers FROM customer A 
+INNER JOIN address B ON A.address_id = B.address_id 
+INNER JOIN city C ON B.city_id = C.city_id INNER JOIN country D ON C.country_ID = D.country_ID 
+GROUP BY city,country ORDER BY number_of_customers 
+DESC LIMIT 10 
+
+## Summary of film data frame
+SELECT MIN(rental_duration) AS minimum_rental_duration,
+MAX(rental_duration) AS maximum_rental_duration,
+AVG(rental_duration) AS average_rental_duration,
+MIN(rental_rate) AS minimum_rental_rate,
+MAX(rental_rate) AS maximum_rental_rate,
+AVG(rental_rate) AS average_rental_rate,
+MIN(replacement_cost) AS minimum_replacement_cost,
+MAX(replacement_cost) AS maximum_replacement_cost,
+AVG(replacement_cost) AS average_replacement_cost,
+MIN(length) AS minimum_length, MAX(length) AS maximum_length,
+AVG(length) AS average_length,
+MODE() WITHIN GROUP (ORDER BY rating) AS rating_mode,
+MODE() WITHIN GROUP (ORDER BY language_id) AS language_id_mode,
+MODE() WITHIN GROUP (ORDER BY release_year) AS release_year_mode,
+MODE() WITHIN GROUP (ORDER BY last_update) AS last_update_mode
+FROM film
+
+## mode of customer data frame
+SELECT MODE() WITHIN GROUP (ORDER BY first_name) AS first_name_mode,
+MODE() WITHIN GROUP (ORDER BY last_name) AS last_name_mode,
+MODE() WITHIN GROUP (ORDER BY store_id) AS store_id_mode,
+MODE() WITHIN GROUP (ORDER BY customer_id) AS customer_id_mode,
+MODE() WITHIN GROUP (ORDER BY email) AS email_mode,
+MODE() WITHIN GROUP (ORDER BY address_id) AS address_id_mode,
+MODE() WITHIN GROUP (ORDER BY active) AS active_mode,
+MODE() WITHIN GROUP (ORDER BY active) AS active_mode ,
+MODE() WITHIN GROUP (ORDER BY create_date) AS create_date_mode,
+MODE() WITHIN GROUP (ORDER BY last_update) AS last_update_mode
+FROM customer
+
+## Finding actors with highest revenue
+SELECT A.first_name,A.last_name,COUNT(B.film_id) AS number_of_films_starred,Z.amount,B.title
+FROM actor A
+INNER JOIN film_actor D ON A.actor_id=D.actor_id
+INNER JOIN inventory F ON D.film_id=F.film_id
+INNER JOIN film B ON F.film_id=B.film_id
+INNER JOIN rental H ON F.inventory_id=H.inventory_id
+INNER JOIN payment Z ON H.rental_id=Z.rental_id
+GROUP BY first_name,last_name,amount,title
+ORDER BY amount DESC 
+LIMIT 13
+
+## Finding films with highest revenue
+SELECT Z.amount,B.title
+FROM film B
+INNER JOIN inventory S ON B.film_id=S.film_id
+INNER JOIN rental G ON S.inventory_id=G.inventory_id
+INNER JOIN payment Z ON G.rental_id=Z.rental_id
+GROUP BY title,amount
+ORDER BY amount DESC 
+LIMIT 10
+
+## Finding categories with the highest rental duration
+SELECT Z.amount,B.name, L.rental_duration
+FROM category B
+INNER JOIN film_category K ON B.category_id=K.category_id
+INNER JOIN inventory S ON K.film_id=S.film_id
+INNER JOIN rental G ON S.inventory_id=G.inventory_id
+INNER JOIN payment Z ON G.rental_id=Z.rental_id
+INNER JOIN film L ON K.film_id=L.film_id
+GROUP BY name,amount,rental_duration
+ORDER BY amount DESC 
+LIMIT 10
+
+##Finding the categories with highest revenue
+SELECT Z.amount,B.name, L.rental_duration
+FROM category B
+INNER JOIN film_category K ON B.category_id=K.category_id
+INNER JOIN inventory S ON K.film_id=S.film_id
+INNER JOIN rental G ON S.inventory_id=G.inventory_id
+INNER JOIN payment Z ON G.rental_id=Z.rental_id
+INNER JOIN film L ON K.film_id=L.film_id
+GROUP BY name,amount,rental_duration
+ORDER BY rental_duration DESC 
+
+##Finding the cities with highest revenue
+SELECT C.city, COUNT(A.customer_id) AS number_of_customers, E.amount
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_ID = D.country_ID
+INNER JOIN rental Z ON A.customer_id=Z.customer_id
+INNER JOIN payment E ON Z.rental_id=E.rental_id
+GROUP BY city,country,amount
+ORDER BY amount DESC
+LIMIT 10
+
+
+
+
+
+
